@@ -1,2 +1,2 @@
-# roctoproject.github.io
-The landing page for rocto.
+# ROctopus-page
+Landing page for ROctopus
