@@ -21,19 +21,19 @@ $("document").ready(() => {
 
       // UI functions
       $(".maincontent").on("click", "#request", () => {
-        $.get("./js/request.json", (task) => {
+        $.get("./js/request.txt", (task) => {
           $("#json").val(task);
         });
       });
 
       $(".maincontent").on("click", "#submit", () => {
-        $.get("./js/submit.json", (task) => {
+        $.get("./js/submit.txt", (task) => {
           $("#json").val(task);
         });
       });
 
       $(".maincontent").on("click", "#sendres", () => {
-        $.get("./js/sendres.json", (task) => {
+        $.get("./js/sendres.txt", (task) => {
           $("#json").val(task);
         });
       });
