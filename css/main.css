@@ -2,6 +2,12 @@ html {
     color: #fff;
     font-size: 1em;
     line-height: 1.4;
+    background: url(../img/wallpaper.jpg) no-repeat center center fixed; 
+    background-color: #194158;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 img {
@@ -9,9 +15,11 @@ img {
     height: auto;
 }
 
-#container {
-    margin: 0;
-    padding: 0;
+body {
+  background-color: rgba(0, 0, 0, 0);
+}
+.top-buffer { 
+  margin-top:20px; 
 }
 
 .center-content {
@@ -23,10 +31,6 @@ img {
     width: 100%;
 }
 .intro {
-    background-image: url(../img/wallpaper.jpg); /* Fullscreen Background Image */
-    background-size: cover;
-    background-position: center;
-    background-color: #194158;
     position: fixed;
     z-index: 10;
     overflow: hidden;
@@ -78,6 +82,7 @@ img {
     font-family: 'Overpass', sans-serif;
     font-weight: bold;
     font-size: 4em;
+    color: white;
 }
 
 .subtitle {
@@ -85,4 +90,24 @@ img {
     font-size: 2.5em;
     font-weight: normal;
     margin: 15px 0;
+}
+
+.maincontent {
+  font-family: 'Overpass', sans-serif;
+  font-weight: bold;
+  font-size: 1em;
+  background: rgba(0, 0, 0, 0) !important;
+}
+
+.trans {
+  background: rgba(0, 0, 0, 0) !important;
+}
+
+.resizev {
+  resize: vertical;
+}
+
+.console-style {
+  background-color: rgba(64,64,64,0.8) !important;
+  color: rgb(250,250,250) !important;
 }

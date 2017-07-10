@@ -1,0 +1,32 @@
+{
+  "emit": "submit_task",
+  "content": {
+    "meta": {
+      "version": "0.1.0",
+      "jobId":  "WEBJOBID",
+      "user": "webclient",
+      "numTasks": 10,
+      "fileSize": "100",
+      "notify": "none",
+      "requirements": {
+        "memory": "300",
+        "cpuTime": 30,
+        "packages": [
+          { 
+            "name": "ggplot2",
+            "version": "2.0.0",
+            "repo": "CRAN"
+          },
+          { 
+            "name": "rocto",
+            "version": "0.1.0",
+            "repo": "github"
+          }
+        ],
+        "RVersion": "3.4.0",
+        "cores": 1
+      }
+    },
+    "content": "somecontent"
+  }
+}

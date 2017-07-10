@@ -1,41 +1,103 @@
-var state = 1
-var content = "";
-function loadUI (){
-  content = '</br></br>address <input id="address"/>  port <input id="port"/>  <button id="connect" type="button">    connect!  </button>  <br/>  <div> Connection status: <span id="status"> not connected </span> </div>   <br/>  <br/>  <button id="task" type="button">      Get a task!  </button>  <br/>  <br/>  <button id="file" type="button">      Write a file!  </button>  <br/>  <br/>  rscript url <input id="rscript"/>  rdata url <input id="rdata"/>  username <input id="user"/>  <button id="addtask"type="button">    add this task  </button>';
-  $('#maincontent').html(content).css("color", "black" );
-  $.getScript("https://gitcdn.link/repo/ROctopus/ROctopus-server/master/public/js/client.js")
-  .done(function( script, textStatus ) {
-    console.log( textStatus );
-    $.getScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js")
-    .done(function( script, textStatus){
-      $.getScript("https://gitcdn.link/repo/ROctopus/ROctopus-server/master/public/js/codes.js")
-      .done(function( script, textStatus ) {
-        console.log( textStatus );
-        dispatchEvent(new Event('load'));
-      });
-    });
-  });
-}
-
-// define a handler
-function shortcut(e) {
-    if (e.keyCode == 85) {
-      // ctrl+b
-      if (state%2==0){
-        $('#maincontent').html("");
-        console.log("UI hidden");
-      } else if (state > 1) {
-        $('#maincontent').html(content);
-        console.log("UI shown");
-      } else {
-        console.log("Loading UI.")
-        loadUI();
-      }      
-      state++;
+$("document").ready(() => {
+  var uiLoaded = false;
+  //var socket = io("http://localhost:8000");
+  // define a handler for the u key
+  function shortcut(e) {
+    if (e.keyCode == 85 && !uiLoaded) {
+      loadUI();
     }
-}
-// register the handler 
-document.addEventListener('keyup', shortcut, false);
+    if (e.keyCode == 76 && uiLoaded) {
+      $("#output").html("");
+    }
+  }
 
-// console log
-console.log("\n%cHi.\n%cPress u to load the ui.\n%chttp://www.github.com/ROctopus%c \n\n","font-family: Consolas; font-size: 32px; color: #992589","font-family: consolas; font-size: 16px; color: #767676","font-family: Helvetica Neue, sans-serif; font-size: 11px; text-decoration: underline; line-height: 1.2rem; color: #767676","")
+  var loadUI = function() {
+    $.get("./ui.html", (result) => {
+      $(".intro").fadeOut(100, () => {
+        $(".maincontent").hide().html(result).fadeIn(100);
+      });
+
+    }).done(() => {
+
+      // UI functions
+      $(".maincontent").on("click", "#request", () => {
+        $.get("./js/request.json", (task) => {
+          $("#json").val(task);
+        });
+      });
+
+      $(".maincontent").on("click", "#submit", () => {
+        $.get("./js/submit.json", (task) => {
+          $("#json").val(task);
+        });
+      });
+
+      $(".maincontent").on("click", "#sendres", () => {
+        $.get("./js/sendres.json", (task) => {
+          $("#json").val(task);
+        });
+      });
+
+      $(".maincontent").on("click", "#showhide", () => {
+        var j = $("#json");
+        if (j.is(":visible")) {
+          j.slideUp(100, () => {
+            $("#jsonrow").removeClass("top-buffer");
+          });
+          $("#showhide").html("Show json");
+        } else {
+          j.slideDown(100);
+          $("#showhide").html("Hide json");
+          $("#jsonrow").addClass("top-buffer");
+        }
+      });
+
+      $(".maincontent").on("click", "#connect", () => {
+        var socket = io($("#address").val() + ":" + $("#port").val())
+        socket.on("connect", () => {
+          $("#status").html("Connected");
+        });
+
+        socket.on("disconnect", () => {
+          $("#status").html("Not connected");
+        });
+        
+        $(".maincontent").on("click", "#send", () => {
+          try {
+              var c = JSON.parse($("#json").val());
+          } catch(e) {
+              $("#output").append("Error: invalid JSON\n")
+                          .append(e).append("\n\n"); // error in the above string (in this case, yes)!
+          }
+          
+          socket.emit(c.emit,c.content);
+        });
+        
+        // always put everything in output
+        var onevent = socket.onevent;
+        socket.onevent = function(packet) {
+          var args = packet.data || [];
+          onevent.call(this, packet); // original call
+          packet.data = ["*"].concat(args);
+          onevent.call(this, packet); // additional call to catch-all
+        };
+
+        socket.on("*", function(event, data) {
+          $("#output").append(event)
+            .append("\n" + JSON.stringify(data) + "\n\n")
+            .scrollTop($("#output")[0].scrollHeight);
+        });
+      });
+
+
+
+      uiLoaded = true;
+      console.log("ui loaded");
+    });
+  }
+
+
+  // register the handler 
+  document.addEventListener('keyup', shortcut, false);
+  console.log("\n%cHi.\n%cPress u to load the ui.\n%chttp://www.github.com/roctoproject%c \n\n", "font-family: Consolas; font-size: 32px; color: #992589", "font-family: consolas; font-size: 16px; color: #767676", "font-family: Helvetica Neue, sans-serif; font-size: 11px; text-decoration: underline; line-height: 1.2rem; color: #767676", "")
+});

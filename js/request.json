@@ -1,0 +1,10 @@
+{
+  "emit": "request_task",
+  "content": {
+    "version": "0.1.0",
+    "memory": "300",
+    "RVersion": "3.4.0",
+    "cores": 1,
+    "user": "webclient"
+  }
+}

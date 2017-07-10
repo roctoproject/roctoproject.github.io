@@ -1,0 +1,10 @@
+{
+  "emit": "send_results",
+  "content": {
+    "version": "0.1.0",
+    "jobId": "WEBJOBID",
+    "iterNo": 1,
+    "exitStatus": 0,
+    "content": "resultcontent"
+  }
+}
